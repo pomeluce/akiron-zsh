@@ -21,6 +21,7 @@ alias nxshow='nix flake show'
 alias nxcheck='nix flake check'
 alias nxnew='nix flake new'
 alias nxdev='nix develop'
+alias nxbuild='nix build'
 
 # ── nxgc: Nix garbage collection ────────────────────────────────────────────
 function nxgc() {
