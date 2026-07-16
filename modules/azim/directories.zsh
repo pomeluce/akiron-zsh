@@ -8,8 +8,7 @@ alias -g ....='../../..'
 alias -g .....='../../../..'
 alias -g ......='../../../../..'
 
-alias sudo='sudo '
-
+# `..`, `...`, ... jump up via auto_cd (set in theme-appearence.zsh)
 alias -- -='cd -'
 alias 1='cd -1'
 alias 2='cd -2'
@@ -23,20 +22,22 @@ alias 9='cd -9'
 
 alias md='mkdir -p'
 alias rd='rmdir'
-alias rrf='rm -rf'
-alias lnk='ln -s'
-alias rlnk='ln -snf'
-alias ds='du -sh ./* | sort -hr'
-command -v bat &> /dev/null && alias cat='bat -p'
 
-# deveop commands alias
-command -v nvim &> /dev/null && alias v='nvim'
-command -v nvim &> /dev/null && alias vim='nvim'
-command -v npm &> /dev/null && alias n='npm'
-command -v pnpm &> /dev/null && alias p='pnpm'
-command -v yarn &> /dev/null && alias y='yarn'
+# Create a directory and cd into it
+function mkcd() { mkdir -p "$1" && cd "$1"; }
 
-function d () {
+# Disk usage of entries under each given dir (default: current dir), including
+# dotfiles/dotdirs, sorted by size descending. Usage: ds [dir...]
+function ds() {
+  local target
+  for target in "${@:-.}"; do
+    [[ -d $target ]] || continue
+    du -sh "$target"/*(DN) 2>/dev/null
+  done | sort -hr
+}
+compdef _files ds
+
+function d() {
   if [[ -n $1 ]]; then
     dirs "$@"
   else
@@ -51,19 +52,13 @@ if command -v lsd &> /dev/null; then
   alias ll='lsd -lh'
   alias ls='lsd --color=auto'
   alias la='lsd -lAh'
-  alias lsa='lsd -lah'
   alias lt='lsd --tree'
   alias lta='lsd -a --tree'
-  alias ltd='lsd --tree --depth ${1}'
-  alias ltda='lsd -a --tree --depth ${1}'
+  function ltd()  { lsd --tree --depth "$1" "${@:2}"; }
+  function ltda() { lsd -a --tree --depth "$1" "${@:2}"; }
 else
   alias ls='ls --color=auto'
-  alias lsa='ls -lah'
   alias l='ls -lah'
   alias ll='ls -lh'
   alias la='ls -lAh'
 fi
-
-function rp() {
-  realpath "$(which $1)"
-}
