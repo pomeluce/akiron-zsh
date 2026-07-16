@@ -4,17 +4,12 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =
     inputs@{
       self,
       flake-parts,
-      home-manager,
       ...
     }:
     flake-parts.lib.mkFlake { inherit inputs; } {
@@ -142,7 +137,7 @@
         };
 
       perSystem =
-        { pkgs, system, ... }:
+        { pkgs, ... }:
         let
           defaultPackages = with pkgs; [
             zsh
@@ -178,12 +173,7 @@
           packages.default = azimfwPackage;
 
           devShells.default = pkgs.mkShell {
-            packages =
-              defaultPackages
-              ++ (with pkgs; [
-                nix
-                home-manager.packages.${system}.default
-              ]);
+            packages = defaultPackages ++ [ pkgs.nix ];
           };
 
           checks.package-build = pkgs.runCommand "akir-zimfw-package-build-check" { } ''
@@ -192,21 +182,6 @@
             test -d ${azimfwPackage}/modules/azim
             touch $out
           '';
-
-          checks.home-manager-module =
-            (home-manager.lib.homeManagerConfiguration {
-              inherit pkgs;
-              modules = [
-                self.homeManagerModules.default
-                {
-                  home.username = "azimfw-test";
-                  home.homeDirectory = "/home/azimfw-test";
-                  home.stateVersion = "26.11";
-
-                  programs.azimfw.enable = true;
-                }
-              ];
-            }).activationPackage;
         };
     };
 }
