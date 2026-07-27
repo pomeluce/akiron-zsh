@@ -48,14 +48,56 @@ function nxgc() {
 
 # ── nxrun: nix run (with smart package resolution) ──────────────────────────
 function nxrun() {
+  if (( $# == 0 )); then
+    echo "Usage: nxrun <package> [-- args...]" >&2
+    return 1
+  fi
+
   local pkg=$1
   local name
+  shift
   case "$pkg" in
     github:*|.*|/*|*#*) name=$pkg ;;  # GitHub refs, local paths, flake refs
     *) name="nixpkgs#$pkg" ;;         # plain package name → nixpkgs
   esac
-  nix run "$name"
+  nix run "$name" "$@"
 }
+
+# Adapt nxrun's shorthand syntax to Nix's native completion protocol.
+function _nxrun() {
+  local pkg=${words[2]}
+
+  if (( CURRENT == 2 )); then
+    case "$pkg" in
+      github:*|.*|/*|*#*) ;;
+      *)
+        local ifs_bk=$IFS
+        local suggestion
+        local -a res suggestions
+
+        IFS=$'\n'
+        res=($(NIX_GET_COMPLETIONS=2 nix run "nixpkgs#$pkg" 2>/dev/null))
+        IFS=$ifs_bk
+
+        for suggestion in ${res:1}; do
+          suggestion=${suggestion%%$'\t'*}
+          suggestions+=("${suggestion#nixpkgs#}")
+        done
+        compadd -J nix -S '' -a suggestions
+        return
+        ;;
+    esac
+  fi
+
+  local -a words=(nix run "${words[@]:1}")
+  local CURRENT=$(( CURRENT + 1 ))
+  case "${words[3]}" in
+    github:*|.*|/*|*#*) ;;
+    *) words[3]="nixpkgs#${words[3]}" ;;
+  esac
+  _nix
+}
+compdef _nxrun nxrun
 
 # ── nxsearch: search nixpkgs ────────────────────────────────────────────────
 if command -v jq >/dev/null 2>&1; then

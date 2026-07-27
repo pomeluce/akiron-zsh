@@ -324,7 +324,7 @@ user at host in  /etc/nixos on  main ↑ via myenv 
 | 命令                           | 说明                                                      |
 | ------------------------------ | --------------------------------------------------------- |
 | `nxsearch <name>`              | 在 nixpkgs 中搜索包，显示名称、版本和描述                 |
-| `nxrun <pkg>`                  | `nix run` 快捷方式，包名自动映射到 nixpkgs                |
+| `nxrun <pkg> [-- args...]`     | `nix run` 快捷方式，包名自动映射到 nixpkgs，支持传递参数  |
 | `nx <pkgs...>`                 | 使用指定包进入 nix shell 临时环境                         |
 | `nxhash [--both] [type] <url>` | 获取文件 URL 的 SRI 格式哈希值（用于编写 Nix derivation） |
 
