@@ -57,7 +57,7 @@ function nxrun() {
   local name
   shift
   case "$pkg" in
-    github:*|.*|/*|*#*) name=$pkg ;;  # GitHub refs, local paths, flake refs
+    github:*|.*|/*|*'#'*) name=$pkg ;;  # GitHub refs, local paths, flake refs
     *) name="nixpkgs#$pkg" ;;         # plain package name → nixpkgs
   esac
   nix run "$name" "$@"
@@ -69,7 +69,7 @@ function _nxrun() {
 
   if (( CURRENT == 2 )); then
     case "$pkg" in
-      github:*|.*|/*|*#*) ;;
+      github:*|.*|/*|*'#'*) ;;
       *)
         local ifs_bk=$IFS
         local suggestion
@@ -81,7 +81,7 @@ function _nxrun() {
 
         for suggestion in ${res:1}; do
           suggestion=${suggestion%%$'\t'*}
-          suggestions+=("${suggestion#nixpkgs#}")
+          suggestions+=("${suggestion#nixpkgs\#}")
         done
         compadd -J nix -S '' -a suggestions
         return
@@ -92,7 +92,7 @@ function _nxrun() {
   local -a words=(nix run "${words[@]:1}")
   local CURRENT=$(( CURRENT + 1 ))
   case "${words[3]}" in
-    github:*|.*|/*|*#*) ;;
+    github:*|.*|/*|*'#'*) ;;
     *) words[3]="nixpkgs#${words[3]}" ;;
   esac
   _nix
@@ -125,7 +125,7 @@ function nx() {
   local pkgs=()
   for pkg in "${args[@]}"; do
     case "$pkg" in
-      github:*|.*|/*|*#*) pkgs+=("$pkg") ;;
+      github:*|.*|/*|*'#'*) pkgs+=("$pkg") ;;
       *) pkgs+=("nixpkgs#$pkg") ;;
     esac
   done
