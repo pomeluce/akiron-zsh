@@ -12,7 +12,7 @@
 | **extract**      | 文件解压缩模块，支持 `tar.gz`、`zip`、`rar`、`7z`、`deb` 等 20+ 种压缩格式的一键解压         |
 | **fzf**          | 基于 fzf 的命令行模糊搜索模块，提供智能补全、文件预览、图片预览、进程管理等功能              |
 | **fzf-tab-hook** | fzf-tab 的 Hook 脚本，用于增强 Tab 补全体验                                                  |
-| **git**          | Git 增强模块，提供 20+ 个常用 git 命令别名，以及彩色 git log 输出                            |
+| **git**          | Git 增强模块，提供约 80 个常用 git 命令别名（统一 `g` 前缀命名），以及彩色 git log 输出      |
 | **nix**          | Nix/NixOS 集成模块，提供 `nixos-rebuild`、`home-manager`、垃圾回收、包搜索等快捷命令         |
 | **sudo**         | 快捷 sudo 模块，按 `Esc` 两次自动在命令前添加 `sudo` 前缀                                    |
 
@@ -282,30 +282,165 @@ user at host in  /etc/nixos on  main ↑ via myenv 
 
 ## Git 快捷命令
 
-| 别名              | 说明                                                                   |
-| ----------------- | ---------------------------------------------------------------------- |
-| `gc <url>`        | git clone                                                              |
-| `gco`             | git checkout                                                           |
-| `gb`              | git branch                                                             |
-| `gpu`             | git push origin                                                        |
-| `gpd`             | git pull origin --ff-only                                              |
-| `gd`              | git diff（无 pager）                                                   |
-| `gs`              | git status（无 pager）                                                 |
-| `gss`             | git status -s                                                          |
-| `gpt`             | git push origin --tags                                                 |
-| `gtl`             | git tag 列表（按日期排序）                                             |
-| `grv`             | git remote -v                                                          |
-| `grs <url>`       | git remote set-url origin                                              |
-| `gra <url>`       | git remote add origin                                                  |
-| `gfr`             | git fetch --all && git reset --hard origin && git pull（强制同步远端） |
-| `gsn <id>`        | git show --name-only（查看 commit 变更文件列表）                       |
-| `gsd <id> <file>` | git show（查看指定 commit 中指定文件的变更）                           |
-| `ga <file>`       | git add                                                                |
-| `gt <tag> <msg>`  | git tag -a -m                                                          |
-| `gm <msg>`        | git commit -m                                                          |
-| `gam <msg>`       | git add --all && git commit -m                                         |
-| `gll [n]`         | git log 简洁版（默认 10 条）                                           |
-| `glla [n]`        | git log 详细版（包含时间、作者）                                       |
+所有命令统一采用 `g` + 类别首字母的命名约定。简单命令为别名，带参数拼接的为函数。
+
+> **破坏性变更**：早期版本的部分别名已重命名（如 `gc`→`gcl`、`gpu`→`gp`、`gpd`→`gpl`），旧名不再可用。
+
+### 克隆 / 初始化
+
+| 别名              | 说明      |
+| ----------------- | --------- |
+| `gcl <url> [dir]` | git clone |
+| `gin`             | git init  |
+
+### 暂存 / 提交
+
+| 别名           | 说明                                             |
+| -------------- | ------------------------------------------------ |
+| `ga <path...>` | git add（支持多文件）                            |
+| `gaa`          | git add --all（含删除）                          |
+| `gm <msg>`     | git commit -m                                    |
+| `gam <msg>`    | git add --all && git commit -m（暂存全部并提交） |
+| `gca`          | git commit --amend --no-edit（修补上次提交）     |
+| `gcam <msg>`   | git commit --amend -m（修补并改写提交信息）      |
+
+### 分支 / 检出 / 切换
+
+| 别名                   | 说明                              |
+| ---------------------- | --------------------------------- |
+| `gb`                   | git branch                        |
+| `gba`                  | git branch --all                  |
+| `gbd <branch>`         | git branch -d（删除）             |
+| `gbD <branch>`         | git branch -D（强制删除）         |
+| `gco`                  | git checkout                      |
+| `gcb <branch> [start]` | git checkout -b（新建并检出分支） |
+| `gsw`                  | git switch                        |
+| `gswc <branch>`        | git switch -c（新建并切换）       |
+
+### 推送 / 拉取 / 获取
+
+| 别名  | 说明                                                                  |
+| ----- | --------------------------------------------------------------------- |
+| `gp`  | git push（按已配置的上游）                                            |
+| `gpf` | git push --force-with-lease（比 --force 更安全）                      |
+| `gpt` | git push origin --tags                                                |
+| `gpl` | git pull --ff-only                                                    |
+| `gf`  | git fetch                                                             |
+| `gfa` | git fetch --all --prune                                               |
+| `gfr` | git fetch --all && git reset --hard origin/\<branch\>（强制同步远端） |
+
+### 差异 / 状态
+
+| 别名  | 说明                         |
+| ----- | ---------------------------- |
+| `gd`  | git diff（无 pager）         |
+| `gdc` | git diff --cached（已暂存）  |
+| `gs`  | git status（无 pager）       |
+| `gss` | git status -s                |
+| `gsb` | git status -sb（含分支信息） |
+
+### 远端
+
+| 别名               | 说明               |
+| ------------------ | ------------------ |
+| `grv`              | git remote -v      |
+| `gra <name> <url>` | git remote add     |
+| `grmv <old> <new>` | git remote rename  |
+| `grrm <name>`      | git remote remove  |
+| `grs <name> <url>` | git remote set-url |
+
+### 标签
+
+| 别名             | 说明                        |
+| ---------------- | --------------------------- |
+| `gt <tag> <msg>` | git tag -a -m（带注释标签） |
+| `gtl`            | git tag 列表（按日期排序）  |
+| `gtd <tag>`      | git tag -d（删除标签）      |
+
+### 日志
+
+| 别名         | 说明                                    |
+| ------------ | --------------------------------------- |
+| `gll [n]`    | git log 简洁版（默认 10 条，彩色）      |
+| `glla [n]`   | git log 详细版（含时间、作者）          |
+| `glo [n]`    | git log --oneline --graph（默认 15 条） |
+| `glf <file>` | git log --follow（某文件的完整历史）    |
+
+### 查看
+
+| 别名                  | 说明                                         |
+| --------------------- | -------------------------------------------- |
+| `gsh [commit]`        | git show                                     |
+| `gsn [commit]`        | git show --name-only（仅变更文件列表）       |
+| `gsd <commit> <file>` | git show（查看指定 commit 中指定文件的变更） |
+
+### 储藏（stash）
+
+| 别名                | 说明            |
+| ------------------- | --------------- |
+| `gst [-u] [-m msg]` | git stash push  |
+| `gsta <stash>`      | git stash apply |
+| `gstp <stash>`      | git stash pop   |
+| `gstl`              | git stash list  |
+| `gstd <stash>`      | git stash drop  |
+| `gstc`              | git stash clear |
+
+### 变基 / 合并 / 樱桃挑选
+
+| 别名            | 说明                           |
+| --------------- | ------------------------------ |
+| `grb`           | git rebase                     |
+| `grbi [n]`      | git rebase -i HEAD~n（默认 3） |
+| `grbc`          | git rebase --continue          |
+| `grbs`          | git rebase --skip              |
+| `grba`          | git rebase --abort             |
+| `gmrg <branch>` | git merge                      |
+| `gmrgc`         | git merge --continue           |
+| `gmrga`         | git merge --abort              |
+| `gcp <commit>`  | git cherry-pick                |
+| `gcpc`          | git cherry-pick --continue     |
+| `gcpa`          | git cherry-pick --abort        |
+
+### 重置 / 撤销 / 清理
+
+| 别名            | 说明                                                           |
+| --------------- | -------------------------------------------------------------- |
+| `grh [ref]`     | git reset --hard（丢弃工作区改动）                             |
+| `gundo [n]`     | git reset --soft HEAD~n（撤销最近 n 次提交，保留改动，默认 1） |
+| `grev <commit>` | git revert（生成反向提交）                                     |
+| `gcln`          | git clean -nd（预览将删除的未跟踪文件）                        |
+| `gclnf`         | git clean -fd（强制删除未跟踪文件和目录）                      |
+
+### 冲突处理
+
+| 别名                | 说明                                      |
+| ------------------- | ----------------------------------------- |
+| `gours <file...>`   | git checkout --ours（冲突中保留本地版本） |
+| `gtheirs <file...>` | git checkout --theirs（采用对方版本）     |
+
+### 追溯 / 引用日志 / 二分
+
+| 别名         | 说明             |
+| ------------ | ---------------- |
+| `gbl <file>` | git blame        |
+| `grl`        | git reflog       |
+| `gbs`        | git bisect start |
+| `gbsg`       | git bisect good  |
+| `gbsb`       | git bisect bad   |
+| `gbsr`       | git bisect reset |
+
+### 工作树 / 子模块 / 搜索
+
+| 别名                   | 说明                                    |
+| ---------------------- | --------------------------------------- |
+| `gwt`                  | git worktree                            |
+| `gwta <path> <branch>` | git worktree add（添加工作树）          |
+| `gwtl`                 | git worktree list                       |
+| `gwtr <path>`          | git worktree remove                     |
+| `gsm`                  | git submodule                           |
+| `gsma <url> [path]`    | git submodule add                       |
+| `gsmu`                 | git submodule update --init --recursive |
+| `gg <pattern>`         | git grep                                |
 
 ## Nix 模块命令（仅 Nix/NixOS 环境可用）
 
