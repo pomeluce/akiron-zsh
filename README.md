@@ -1,4 +1,4 @@
-# akir-zimfw
+# akiron-zsh
 
 基于 [zimfw](https://github.com/zimfw/zimfw) 框架构建的 zsh 使用环境，提供丰富的功能模块、常用插件整合、智能别名与快捷键绑定，让 zsh 使用更加高效顺手。
 
@@ -6,7 +6,7 @@
 
 | 模块             | 说明                                                                                         |
 | ---------------- | -------------------------------------------------------------------------------------------- |
-| **azim**         | 核心模块，配置补全系统、历史记录管理、终端按键绑定、grep 优化、目录跳转、Hook 脚本等基础功能 |
+| **akiron-zsh**   | 核心模块，配置补全系统、历史记录管理、终端按键绑定、grep 优化、目录跳转、Hook 脚本等基础功能 |
 | **asciiship**    | 终端提示符主题模块，支持 `compact`（紧凑）和 `segments`（分段）两种风格，集成 git 状态显示   |
 | **colorful**     | 自定义颜色主题，提供 ls 等命令的配色方案                                                     |
 | **extract**      | 文件解压缩模块，支持 `tar.gz`、`zip`、`rar`、`7z`、`deb` 等 20+ 种压缩格式的一键解压         |
@@ -33,7 +33,7 @@
 ├── LICENSE
 ├── modules
 │   ├── asciiship         # 提示符主题模块
-│   ├── azim              # 核心功能模块
+│   ├── akiron-zsh         # 核心功能模块
 │   │   ├── azim.zsh         #   模块入口
 │   │   ├── completion.zsh   #   补全系统配置
 │   │   ├── directories.zsh  #   目录操作别名
@@ -82,14 +82,14 @@
 
 通过 Home Manager 模块引入，自动管理依赖和配置。
 
-1.  在你的 `flake.nix` 中添加 `akir-zimfw` 作为输入：
+1.  在你的 `flake.nix` 中添加 `akiron-zsh` 作为输入：
 
     ```nix
     {
       inputs = {
         nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
         home-manager.url = "github:nix-community/home-manager";
-        azimfw.url = "github:pomeluce/akir-zimfw";
+        akiron-zsh.url = "github:pomeluce/akiron-zsh";
       };
     }
     ```
@@ -99,10 +99,10 @@
     ```nix
     {
       homeManagerModules = [
-        azimfw.homeManagerModules.default
+        akiron-zsh.homeManagerModules.default
       ];
     
-      programs.azimfw = {
+      programs.akiron-zsh = {
         enable = true;
     
         # 可选：添加额外依赖包
@@ -113,7 +113,7 @@
         ];
     
         # 可选：自定义配置目录
-        configDir = ".config/azimfw";
+        configDir = ".config/akiron-zsh";
       };
     }
     ```
@@ -126,16 +126,16 @@
 
 #### Nix 可用参数
 
-以下参数可通过 `programs.azimfw` 的选项进行配置，无需手动设置环境变量：
+以下参数可通过 `programs.akiron-zsh` 的选项进行配置，无需手动设置环境变量：
 
 | 参数                 | 类型                          | 默认值                                  | 说明                                                |
 | -------------------- | ----------------------------- | --------------------------------------- | --------------------------------------------------- |
-| `enable`             | boolean                       | `false`                                 | 启用 akir-zimfw                                     |
-| `package`            | package                       | `self.packages.${system}.default`       | 指定 akir-zimfw 包                                  |
-| `configDir`          | string                        | `".config/azimfw"`                      | 相对于 `$HOME` 的配置目录路径                       |
+| `enable`             | boolean                       | `false`                                 | 启用 akiron-zsh                                     |
+| `package`            | package                       | `self.packages.${system}.default`       | 指定 akiron-zsh 包                                  |
+| `configDir`          | string                        | `".config/akiron-zsh"`                      | 相对于 `$HOME` 的配置目录路径                       |
 | `extraPackages`      | list of package               | `[]`                                    | 额外的可选依赖包                                    |
 | `grepExcludeFolders` | string                        | `"{.bzr,CVS,.git,.hg,.svn,.idea,.tox}"` | grep 命令要忽略的目录列表                           |
-| `zshCacheDir`        | string                        | `"$HOME/.cache/azim"`                   | zsh 缓存目录路径                                    |
+| `zshCacheDir`        | string                        | `"$HOME/.cache/akiron-zsh"`                   | zsh 缓存目录路径                                    |
 | `caseSensitive`      | boolean                       | `false`                                 | Tab 补全时是否大小写敏感                            |
 | `autoInLastDir`      | boolean                       | `false`                                 | 启动终端时是否自动进入上次退出时的目录              |
 | `historyShow`        | boolean                       | `true`                                  | 是否绑定 `Ctrl + R` 快捷键展示搜索历史命令          |
@@ -145,7 +145,7 @@
 
 ```nix
 {
-  programs.azimfw = {
+  programs.akiron-zsh = {
     enable = true;
     extraPackages = with pkgs; [
       lsd
@@ -211,10 +211,10 @@
 
     ```zsh
     # 拉取仓库
-    git clone https://github.com/pomeluce/akir-zimfw.git ~/.config/akir-zimfw
+    git clone https://github.com/pomeluce/akiron-zsh.git ~/.config/akiron-zsh
 
     # 将加载指令写入 .zshrc
-    echo 'source ~/.config/akir-zimfw/init.zsh' >> ~/.zshrc
+    echo 'source ~/.config/akiron-zsh/init.zsh' >> ~/.zshrc
 
     # 重新加载终端环境
     source ~/.zshrc
@@ -235,26 +235,26 @@ export ZSH_CACHE_DIR="$HOME/.cache/my-zsh"
 export CASE_SENSITIVE=true
 
 # 启动终端时自动进入上次目录
-export AZIM_IN_LASTDIR=true
+export AKIRON_ZSH_IN_LASTDIR=true
 
 # 禁用 Ctrl+R 历史搜索
-export AZIM_HISTORY_SHOW=false
+export AKIRON_ZSH_HISTORY_SHOW=false
 
 # 切换提示符风格为分段式
-export AZIM_PROMPT_STYLE=segments
+export AKIRON_ZSH_PROMPT_STYLE=segments
 
-# 最后加载 akir-zimfw
-source ~/.config/akir-zimfw/init.zsh
+# 最后加载 akiron-zsh
+source ~/.config/akiron-zsh/init.zsh
 ```
 
 | 参数                | 默认值                                | 说明                                         |
 | ------------------- | ------------------------------------- | -------------------------------------------- |
 | `EXC_FOLDERS`       | `{.bzr,CVS,.git,.hg,.svn,.idea,.tox}` | 设置 grep 命令要忽略的目录                   |
-| `ZSH_CACHE_DIR`     | `$HOME/.cache/azim`                   | 设置 zsh 缓存目录                            |
+| `ZSH_CACHE_DIR`     | `$HOME/.cache/akiron-zsh`                   | 设置 zsh 缓存目录                            |
 | `CASE_SENSITIVE`    | `false`                               | 设置 Tab 补全时大小写是否敏感                |
-| `AZIM_IN_LASTDIR`   | `false`                               | 是否在启动时自动进入上次退出时的目录         |
-| `AZIM_HISTORY_SHOW` | `true`                                | 是否绑定 `Ctrl + R` 快捷键展示搜索历史命令   |
-| `AZIM_PROMPT_STYLE` | `compact`                             | 设置提示符风格，可选 `compact` 或 `segments` |
+| `AKIRON_ZSH_IN_LASTDIR`   | `false`                               | 是否在启动时自动进入上次退出时的目录         |
+| `AKIRON_ZSH_HISTORY_SHOW` | `true`                                | 是否绑定 `Ctrl + R` 快捷键展示搜索历史命令   |
+| `AKIRON_ZSH_PROMPT_STYLE` | `compact`                             | 设置提示符风格，可选 `compact` 或 `segments` |
 
 ## 提示符风格
 
@@ -278,7 +278,7 @@ user at host in  /etc/nixos on  main ↑ via myenv 
 [ user ] [  /etc/nixos ] [  main ↑ ] [  myenv ] 
 ```
 
-通过 `AZIM_PROMPT_STYLE` 环境变量或 Nix 选项 `promptStyle` 切换。
+通过 `AKIRON_ZSH_PROMPT_STYLE` 环境变量或 Nix 选项 `promptStyle` 切换。
 
 ## Git 快捷命令
 

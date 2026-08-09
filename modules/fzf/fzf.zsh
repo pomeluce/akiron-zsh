@@ -2,9 +2,9 @@
 # try setting RUNEWIDTH_EASTASIAN to 1. If the border is still not properly rendered, set --no-unicode.
 export RUNEWIDTH_EASTASIAN=0
 
-export FZF_DEFAULT_OPTS="--height 16 --scrollbar=▌▐ --info=inline-right --layout=reverse --history=$AZIM_CACHE/fzfhistory"
+export FZF_DEFAULT_OPTS="--height 16 --scrollbar=▌▐ --info=inline-right --layout=reverse --history=$AKIRON_ZSH_CACHE/fzfhistory"
 export FZF_DEFAULT_COMMAND="fd --exclude={.git,.idea,.vscode,.sass-cache,node_modules,build,dist,vendor} --type f"
-export FZF_PREVIEW_COMMAND='zsh $AZIM_HOME/modules/fzf/file-preview.zsh {}'
+export FZF_PREVIEW_COMMAND='zsh $AKIRON_ZSH_HOME/modules/fzf/file-preview.zsh {}'
 
 zstyle ':completion:complete:*:options' sort false
 zstyle ':fzf-tab:complete:_zlua:*' query-string input
@@ -24,5 +24,5 @@ zstyle ':fzf-tab:complete:git-log:*' fzf-preview 'git log --color=always $word'
 zstyle ':fzf-tab:complete:git-show:*' fzf-preview 'git show --color=always $word'
 zstyle ':fzf-tab:complete:git-checkout:*' fzf-preview '[ -f "$realpath" ] && git diff --color=always $word || git log --color=always $word'
 zstyle ':fzf-tab:complete:*:*' fzf-preview 'less ${(Q)realpath}'
-zstyle ':fzf-tab:complete:*:*' fzf-preview 'zsh $AZIM_HOME/modules/fzf/file-preview.zsh ${(Q)realpath}'
+zstyle ':fzf-tab:complete:*:*' fzf-preview 'zsh $AKIRON_ZSH_HOME/modules/fzf/file-preview.zsh ${(Q)realpath}'
 zstyle ':fzf-tab:complete:*:*' fzf-flags --height=16

@@ -1,5 +1,5 @@
 {
-  description = "akir-zimfw zsh configuration flake";
+  description = "akiron-zsh zsh configuration flake";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -28,7 +28,7 @@
           ...
         }:
         let
-          cfg = config.programs.azimfw;
+          cfg = config.programs.akiron-zsh;
           defaultPackages = with pkgs; [
             zsh
             curl
@@ -43,28 +43,28 @@
           hasLsd = builtins.elem pkgs.lsd cfg.extraPackages;
         in
         {
-          options.programs.azimfw = {
-            enable = lib.mkEnableOption "akir-zimfw zsh configuration";
+          options.programs.akiron-zsh = {
+            enable = lib.mkEnableOption "akiron-zsh zsh configuration";
 
             package = lib.mkOption {
               type = lib.types.package;
               default = self.packages.${pkgs.stdenv.hostPlatform.system}.default;
-              defaultText = lib.literalExpression "inputs.azimfw.packages.\${pkgs.stdenv.hostPlatform.system}.default";
-              description = "The akir-zimfw package to link into the Home Manager configuration directory.";
+              defaultText = lib.literalExpression "inputs.akiron-zsh.packages.\${pkgs.stdenv.hostPlatform.system}.default";
+              description = "The akiron-zsh package to link into the Home Manager configuration directory.";
             };
 
             configDir = lib.mkOption {
               type = lib.types.str;
-              default = ".config/azimfw";
-              example = ".config/azimfw";
-              description = "Path relative to the user's home directory where akir-zimfw is linked.";
+              default = ".config/akiron-zsh";
+              example = ".config/akiron-zsh";
+              description = "Path relative to the user's home directory where akiron-zsh is linked.";
             };
 
             extraPackages = lib.mkOption {
               type = lib.types.listOf lib.types.package;
               default = [ ];
               example = lib.literalExpression "with pkgs; [ lsd jq ]";
-              description = "Additional optional packages for akir-zimfw integrations.";
+              description = "Additional optional packages for akiron-zsh integrations.";
             };
 
             grepExcludeFolders = lib.mkOption {
@@ -76,7 +76,7 @@
 
             zshCacheDir = lib.mkOption {
               type = lib.types.str;
-              default = "$HOME/.cache/azim";
+              default = "$HOME/.cache/akiron-zsh";
               example = "$HOME/.cache/my-zsh";
               description = "Directory for zsh cache files (sets ZSH_CACHE_DIR).";
             };
@@ -92,14 +92,14 @@
               type = lib.types.bool;
               default = false;
               example = true;
-              description = "Whether to automatically enter the last working directory on shell start (sets AZIM_IN_LASTDIR).";
+              description = "Whether to automatically enter the last working directory on shell start (sets AKIRON_ZSH_IN_LASTDIR).";
             };
 
             historyShow = lib.mkOption {
               type = lib.types.bool;
               default = true;
               example = false;
-              description = "Whether to bind Ctrl+R to fzf-powered history search (sets AZIM_HISTORY_SHOW).";
+              description = "Whether to bind Ctrl+R to fzf-powered history search (sets AKIRON_ZSH_HISTORY_SHOW).";
             };
 
             promptStyle = lib.mkOption {
@@ -109,7 +109,7 @@
               ];
               default = "compact";
               example = "segments";
-              description = "Prompt display style (sets AZIM_PROMPT_STYLE).";
+              description = "Prompt display style (sets AKIRON_ZSH_PROMPT_STYLE).";
             };
           };
 
@@ -123,9 +123,9 @@
               export EXC_FOLDERS="${cfg.grepExcludeFolders}"
               export ZSH_CACHE_DIR="${cfg.zshCacheDir}"
               export CASE_SENSITIVE="${if cfg.caseSensitive then "true" else "false"}"
-              export AZIM_IN_LASTDIR="${if cfg.autoInLastDir then "true" else "false"}"
-              export AZIM_HISTORY_SHOW="${if cfg.historyShow then "true" else "false"}"
-              export AZIM_PROMPT_STYLE="${cfg.promptStyle}"
+              export AKIRON_ZSH_IN_LASTDIR="${if cfg.autoInLastDir then "true" else "false"}"
+              export AKIRON_ZSH_HISTORY_SHOW="${if cfg.historyShow then "true" else "false"}"
+              export AKIRON_ZSH_PROMPT_STYLE="${cfg.promptStyle}"
               source ${config.home.homeDirectory}/${cfg.configDir}/init.zsh
             '';
 
@@ -151,9 +151,9 @@
             eza
           ];
 
-          azimfwPackage = pkgs.stdenvNoCC.mkDerivation {
-            pname = "akir-zimfw";
-            version = "2026.06.27";
+          akironZshPackage = pkgs.stdenvNoCC.mkDerivation {
+            pname = "akiron-zsh";
+            version = "2026.08.09";
             src = self;
 
             dontConfigure = true;
@@ -170,16 +170,16 @@
           };
         in
         {
-          packages.default = azimfwPackage;
+          packages.default = akironZshPackage;
 
           devShells.default = pkgs.mkShell {
             packages = defaultPackages ++ [ pkgs.nix ];
           };
 
-          checks.package-build = pkgs.runCommand "akir-zimfw-package-build-check" { } ''
-            test -f ${azimfwPackage}/init.zsh
-            test -f ${azimfwPackage}/zimrc
-            test -d ${azimfwPackage}/modules/azim
+          checks.package-build = pkgs.runCommand "akiron-zsh-package-build-check" { } ''
+            test -f ${akironZshPackage}/init.zsh
+            test -f ${akironZshPackage}/zimrc
+            test -d ${akironZshPackage}/modules/akiron-zsh
             touch $out
           '';
         };

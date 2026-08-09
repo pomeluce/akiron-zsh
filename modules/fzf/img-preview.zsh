@@ -3,32 +3,32 @@ declare -r -x UEBERZUG_FIFO="$(mktemp --dry-run --suffix "fzf-$$-ueberzug")"
 declare -r -x PREVIEW_ID="preview"
 
 function start_ueberzug {
-    mkfifo "${UEBERZUG_FIFO}"
-    <"${UEBERZUG_FIFO}" \
-        ueberzug layer --parser bash --silent &
-    3>"${UEBERZUG_FIFO}" \
-        exec
+  mkfifo "${UEBERZUG_FIFO}"
+  <"${UEBERZUG_FIFO}" \
+    ueberzug layer --parser bash --silent &
+  3>"${UEBERZUG_FIFO}" \
+    exec
 }
 
 function finalise {
-    3>&- \
-        exec
-    &>/dev/null \
-        rm "${UEBERZUG_FIFO}"
-    &>/dev/null \
-        kill $(jobs -p)
-    killall ueberzug
+  3>&- \
+    exec
+  &>/dev/null \
+    rm "${UEBERZUG_FIFO}"
+  &>/dev/null \
+    kill $(jobs -p)
+  killall ueberzug
 }
 
 function draw_preview {
-    source $AZIM_CACHE/cursor
-    X=$(($COLUMNS / 2 + 2))
-    Y=$((row + 3))
-    if [ $Y -gt $((LINES - 11)) ]; then
-        Y=$((LINES - 11))
-    fi
+  source $AKIRON_ZSH_CACHE/cursor
+  X=$(($COLUMNS / 2 + 2))
+  Y=$((row + 3))
+  if [ $Y -gt $((LINES - 11)) ]; then
+    Y=$((LINES - 11))
+  fi
 
-    >"${UEBERZUG_FIFO}" bash -c 'declare -A -p cmd=( \
+  >"${UEBERZUG_FIFO}" bash -c 'declare -A -p cmd=( \
         [action]=add [identifier]="'${PREVIEW_ID}'" \
         [x]='"${X}"' [y]='"${Y}"' \
         [width]="'$(($COLUMNS * 2 / 5 - 2))'" [height]="10" \

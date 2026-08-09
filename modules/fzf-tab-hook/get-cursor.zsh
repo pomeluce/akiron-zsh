@@ -8,5 +8,5 @@ IFS=';' read -r -d R -A pos
 stty $oldstty
 row=$((${pos[1]:2} - 1))
 col=$((${pos[2]} - 1))
-echo "export row=$row" > $AZIM_CACHE/cursor
-echo "export col=$col" >> $AZIM_CACHE/cursor
+echo "export row=$row" > $AKIRON_ZSH_CACHE/cursor
+echo "export col=$col" >> $AKIRON_ZSH_CACHE/cursor

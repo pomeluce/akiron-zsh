@@ -1,10 +1,10 @@
-export AZIM_HOME=$(cd $(dirname $0);pwd)
-export AZIM_CACHE=$HOME/.cache/azim
-ZIM_CONFIG_FILE=$AZIM_HOME/zimrc
+export AKIRON_ZSH_HOME=$(cd $(dirname $0);pwd)
+export AKIRON_ZSH_CACHE=$HOME/.cache/akiron-zsh
+ZIM_CONFIG_FILE=$AKIRON_ZSH_HOME/zimrc
 ZIM_HOME=$HOME/.cache/zim
 
-if [[ ! -d ${AZIM_CACHE} ]]; then
-  mkdir $AZIM_CACHE
+if [[ ! -d ${AKIRON_ZSH_CACHE} ]]; then
+  mkdir $AKIRON_ZSH_CACHE
 fi
 
 # Download zimfw plugin manager if missing.
@@ -23,5 +23,5 @@ if [[ -f ${ZIM_HOME}/init.zsh ]]; then
 fi
 
 # hooks start
-[[ $AZIM_HISTORY_SHOW == false ]] || _azim_history_show
-[[ $AZIM_IN_LASTDIR == false ]] || _azim_in_lastdir
+[[ $AKIRON_ZSH_HISTORY_SHOW == false ]] || _akiron_zsh_history_show
+[[ $AKIRON_ZSH_IN_LASTDIR == false ]] || _akiron_zsh_in_lastdir
