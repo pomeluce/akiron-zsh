@@ -1,6 +1,6 @@
-# akiron-zsh
+# Akiron Zsh
 
-基于 [zimfw](https://github.com/zimfw/zimfw) 框架构建的 zsh 使用环境，提供丰富的功能模块、常用插件整合、智能别名与快捷键绑定，让 zsh 使用更加高效顺手。
+基于 [zimfw](https://github.com/zimfw/zimfw) 框架构建的个人 zsh 使用环境，集成自定义 prompt 主题、Git 增强命令、Nix/NixOS 集成、fzf 生态等丰富功能模块，让终端使用更加高效顺手。
 
 ## 功能模块
 
@@ -8,7 +8,6 @@
 | ---------------- | -------------------------------------------------------------------------------------------- |
 | **akiron-zsh**   | 核心模块，配置补全系统、历史记录管理、终端按键绑定、grep 优化、目录跳转、Hook 脚本等基础功能 |
 | **asciiship**    | 终端提示符主题模块，支持 `compact`（紧凑）和 `segments`（分段）两种风格，集成 git 状态显示   |
-| **colorful**     | 自定义颜色主题，提供 ls 等命令的配色方案                                                     |
 | **extract**      | 文件解压缩模块，支持 `tar.gz`、`zip`、`rar`、`7z`、`deb` 等 20+ 种压缩格式的一键解压         |
 | **fzf**          | 基于 fzf 的命令行模糊搜索模块，提供智能补全、文件预览、图片预览、进程管理等功能              |
 | **fzf-tab-hook** | fzf-tab 的 Hook 脚本，用于增强 Tab 补全体验                                                  |
@@ -34,9 +33,11 @@
 ├── modules
 │   ├── asciiship         # 提示符主题模块
 │   ├── akiron-zsh         # 核心功能模块
-│   │   ├── azim.zsh         #   模块入口
-│   │   ├── completion.zsh   #   补全系统配置
-│   │   ├── directories.zsh  #   目录操作别名
+│   │   ├── akiron-zsh.zsh     #   模块入口
+│   │   ├── aliases.zsh        #   命令别名
+│   │   ├── completion.zsh     #   补全系统配置
+│   │   ├── dev.zsh            #   个人开发配置
+│   │   ├── directories.zsh    #   目录操作别名
 │   │   ├── grep.zsh         #   grep 配置
 │   │   ├── history.zsh      #   历史记录配置
 │   │   ├── hooks.zsh        #   Hook 脚本
