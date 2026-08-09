@@ -133,6 +133,38 @@ function nx() {
   nix shell "${pkgs[@]}"
 }
 
+# ── _nx: completion for nx (nix shell with smart package resolution) ─────────
+function _nx() {
+  local cur=${words[CURRENT]}
+  case "$cur" in
+    github:*|.*|/*|*'#'*) _nix; return ;;
+  esac
+
+  local ifs_bk=$IFS
+  local -a res suggestions nix_args
+  local suggestion w i
+
+  nix_args=(nix shell)
+  for (( i = 2; i <= CURRENT; i++ )); do
+    w=${words[i]}
+    case "$w" in
+      github:*|.*|/*|*'#'*) nix_args+=("$w") ;;
+      *) nix_args+=("nixpkgs#$w") ;;
+    esac
+  done
+
+  IFS=$'\n'
+  res=($(NIX_GET_COMPLETIONS=$CURRENT "${nix_args[@]}" 2>/dev/null))
+  IFS=$ifs_bk
+
+  for suggestion in ${res:1}; do
+    suggestion=${suggestion%%$'\t'*}
+    suggestions+=("${suggestion#nixpkgs\#}")
+  done
+  compadd -J nix -S '' -a suggestions
+}
+compdef _nx nx
+
 # ── nxhash: compute SRI hash for a file URL ────────────────────────────────
 nxhash() {
   if [[ $# -lt 1 ]]; then
