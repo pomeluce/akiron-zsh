@@ -72,7 +72,7 @@ if (( ${+functions[git-info]} )); then
   zstyle ':zim:git-info:indexed' format " %{$azim_limegreen%}↑%{$azim_reset_color%}"
   zstyle ':zim:git-info:ahead' format " %{$azim_magenta%}>%{$azim_reset_color%}"
   zstyle ':zim:git-info:behind' format " %{$azim_turquoise%}<%{$azim_reset_color%}"
-  case ${AZIM_PROMPT_STYLE:-compact} in
+  case ${AKIRON_ZSH_PROMPT_STYLE:-compact} in
     segments)
       zstyle ':zim:git-info:keys' format \
         'status' '%S%I%u%i%A%B' \
@@ -148,7 +148,7 @@ typeset -g _prompt_asciiship_segments_ps1="
 \$(_prompt_asciiship_segments_user_host_segment)\$(_prompt_asciiship_segments_path_segment)\$(_prompt_asciiship_segments_git_segment)\$(_prompt_asciiship_segments_env_segment)
 %(?.%{$azim_limegreen%}.%{$azim_red%})\$(_prompt_asciiship_vimode)%{$azim_reset_color%} "
 
-case ${AZIM_PROMPT_STYLE:-compact} in
+case ${AKIRON_ZSH_PROMPT_STYLE:-compact} in
   segments)
     PS1=${_prompt_asciiship_segments_ps1}
     ;;
