@@ -1,5 +1,5 @@
 {
-  description = "akiron-zsh zsh configuration flake";
+  description = "AkironZsh zsh configuration flake";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -28,7 +28,7 @@
           ...
         }:
         let
-          cfg = config.programs.akiron-zsh;
+          cfg = config.programs.akzsh;
           defaultPackages = with pkgs; [
             zsh
             curl
@@ -43,28 +43,28 @@
           hasLsd = builtins.elem pkgs.lsd cfg.extraPackages;
         in
         {
-          options.programs.akiron-zsh = {
-            enable = lib.mkEnableOption "akiron-zsh zsh configuration";
+          options.programs.akzsh = {
+            enable = lib.mkEnableOption "AkironZsh Zsh configuration";
 
             package = lib.mkOption {
               type = lib.types.package;
               default = self.packages.${pkgs.stdenv.hostPlatform.system}.default;
               defaultText = lib.literalExpression "inputs.akiron-zsh.packages.\${pkgs.stdenv.hostPlatform.system}.default";
-              description = "The akiron-zsh package to link into the Home Manager configuration directory.";
+              description = "The AkironZsh package to link into the Home Manager configuration directory.";
             };
 
             configDir = lib.mkOption {
               type = lib.types.str;
-              default = ".config/akiron-zsh";
-              example = ".config/akiron-zsh";
-              description = "Path relative to the user's home directory where akiron-zsh is linked.";
+              default = ".config/akzsh";
+              example = ".config/akzsh";
+              description = "Path relative to the user's home directory where AkironZsh is linked.";
             };
 
             extraPackages = lib.mkOption {
               type = lib.types.listOf lib.types.package;
               default = [ ];
               example = lib.literalExpression "with pkgs; [ lsd jq ]";
-              description = "Additional optional packages for akiron-zsh integrations.";
+              description = "Additional optional packages for AkironZsh integrations.";
             };
 
             grepExcludeFolders = lib.mkOption {
@@ -76,7 +76,7 @@
 
             zshCacheDir = lib.mkOption {
               type = lib.types.str;
-              default = "$HOME/.cache/akiron-zsh";
+              default = "$HOME/.cache/akzsh";
               example = "$HOME/.cache/my-zsh";
               description = "Directory for zsh cache files (sets ZSH_CACHE_DIR).";
             };
@@ -179,7 +179,7 @@
           checks.package-build = pkgs.runCommand "akiron-zsh-package-build-check" { } ''
             test -f ${akironZshPackage}/init.zsh
             test -f ${akironZshPackage}/zimrc
-            test -d ${akironZshPackage}/modules/akiron-zsh
+            test -d ${akironZshPackage}/modules/akzsh
             touch $out
           '';
         };

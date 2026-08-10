@@ -1,6 +1,6 @@
 zmodule git-info
 zmodule $AKIRON_ZSH_HOME/modules/asciiship
-zmodule $AKIRON_ZSH_HOME/modules/akiron-zsh
+zmodule $AKIRON_ZSH_HOME/modules/akzsh
 zmodule $AKIRON_ZSH_HOME/modules/extract
 zmodule $AKIRON_ZSH_HOME/modules/sudo
 zmodule Aloxaf/fzf-tab

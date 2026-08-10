@@ -1,9 +1,0 @@
-source $AKIRON_ZSH_HOME/modules/akiron-zsh/hooks.zsh
-source $AKIRON_ZSH_HOME/modules/akiron-zsh/completion.zsh
-source $AKIRON_ZSH_HOME/modules/akiron-zsh/directories.zsh
-source $AKIRON_ZSH_HOME/modules/akiron-zsh/grep.zsh
-source $AKIRON_ZSH_HOME/modules/akiron-zsh/history.zsh
-source $AKIRON_ZSH_HOME/modules/akiron-zsh/key-bindings.zsh
-source $AKIRON_ZSH_HOME/modules/akiron-zsh/theme-appearence.zsh
-source $AKIRON_ZSH_HOME/modules/akiron-zsh/aliases.zsh
-source $AKIRON_ZSH_HOME/modules/akiron-zsh/dev.zsh

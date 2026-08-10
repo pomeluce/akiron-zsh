@@ -1,4 +1,4 @@
-# Akiron Zsh
+# AkironZsh
 
 基于 [zimfw](https://github.com/zimfw/zimfw) 框架构建的个人 zsh 使用环境，集成自定义 prompt 主题、Git 增强命令、Nix/NixOS 集成、fzf 生态等丰富功能模块，让终端使用更加高效顺手。
 
@@ -6,7 +6,7 @@
 
 | 模块             | 说明                                                                                         |
 | ---------------- | -------------------------------------------------------------------------------------------- |
-| **akiron-zsh**   | 核心模块，配置补全系统、历史记录管理、终端按键绑定、grep 优化、目录跳转、Hook 脚本等基础功能 |
+| **akzsh**        | 核心模块，配置补全系统、历史记录管理、终端按键绑定、grep 优化、目录跳转、Hook 脚本等基础功能 |
 | **asciiship**    | 终端提示符主题模块，支持 `compact`（紧凑）和 `segments`（分段）两种风格，集成 git 状态显示   |
 | **extract**      | 文件解压缩模块，支持 `tar.gz`、`zip`、`rar`、`7z`、`deb` 等 20+ 种压缩格式的一键解压         |
 | **fzf**          | 基于 fzf 的命令行模糊搜索模块，提供智能补全、文件预览、图片预览、进程管理等功能              |
@@ -32,8 +32,8 @@
 ├── LICENSE
 ├── modules
 │   ├── asciiship         # 提示符主题模块
-│   ├── akiron-zsh         # 核心功能模块
-│   │   ├── akiron-zsh.zsh     #   模块入口
+│   ├── akzsh              # 核心功能模块
+│   │   ├── akzsh.zsh          #   模块入口
 │   │   ├── aliases.zsh        #   命令别名
 │   │   ├── completion.zsh     #   补全系统配置
 │   │   ├── dev.zsh            #   个人开发配置
@@ -103,7 +103,7 @@
         akiron-zsh.homeManagerModules.default
       ];
     
-      programs.akiron-zsh = {
+      programs.akzsh = {
         enable = true;
     
         # 可选：添加额外依赖包
@@ -114,7 +114,7 @@
         ];
     
         # 可选：自定义配置目录
-        configDir = ".config/akiron-zsh";
+        configDir = ".config/akzsh";
       };
     }
     ```
@@ -127,16 +127,16 @@
 
 #### Nix 可用参数
 
-以下参数可通过 `programs.akiron-zsh` 的选项进行配置，无需手动设置环境变量：
+以下参数可通过 `programs.akzsh` 的选项进行配置，无需手动设置环境变量：
 
 | 参数                 | 类型                          | 默认值                                  | 说明                                                |
 | -------------------- | ----------------------------- | --------------------------------------- | --------------------------------------------------- |
-| `enable`             | boolean                       | `false`                                 | 启用 akiron-zsh                                     |
+| `enable`             | boolean                       | `false`                                 | 启用 AkironZsh                                      |
 | `package`            | package                       | `self.packages.${system}.default`       | 指定 akiron-zsh 包                                  |
-| `configDir`          | string                        | `".config/akiron-zsh"`                      | 相对于 `$HOME` 的配置目录路径                       |
+| `configDir`          | string                        | `".config/akzsh"`                       | 相对于 `$HOME` 的配置目录路径                       |
 | `extraPackages`      | list of package               | `[]`                                    | 额外的可选依赖包                                    |
 | `grepExcludeFolders` | string                        | `"{.bzr,CVS,.git,.hg,.svn,.idea,.tox}"` | grep 命令要忽略的目录列表                           |
-| `zshCacheDir`        | string                        | `"$HOME/.cache/akiron-zsh"`                   | zsh 缓存目录路径                                    |
+| `zshCacheDir`        | string                        | `"$HOME/.cache/akzsh"`                  | zsh 缓存目录路径                                    |
 | `caseSensitive`      | boolean                       | `false`                                 | Tab 补全时是否大小写敏感                            |
 | `autoInLastDir`      | boolean                       | `false`                                 | 启动终端时是否自动进入上次退出时的目录              |
 | `historyShow`        | boolean                       | `true`                                  | 是否绑定 `Ctrl + R` 快捷键展示搜索历史命令          |
@@ -146,7 +146,7 @@
 
 ```nix
 {
-  programs.akiron-zsh = {
+  programs.akzsh = {
     enable = true;
     extraPackages = with pkgs; [
       lsd
@@ -212,10 +212,10 @@
 
     ```zsh
     # 拉取仓库
-    git clone https://github.com/pomeluce/akiron-zsh.git ~/.config/akiron-zsh
+    git clone https://github.com/pomeluce/akiron-zsh.git ~/.config/akzsh
 
     # 将加载指令写入 .zshrc
-    echo 'source ~/.config/akiron-zsh/init.zsh' >> ~/.zshrc
+    echo 'source ~/.config/akzsh/init.zsh' >> ~/.zshrc
 
     # 重新加载终端环境
     source ~/.zshrc
@@ -244,15 +244,15 @@ export AKIRON_ZSH_HISTORY_SHOW=false
 # 切换提示符风格为分段式
 export AKIRON_ZSH_PROMPT_STYLE=segments
 
-# 最后加载 akiron-zsh
-source ~/.config/akiron-zsh/init.zsh
+# 最后加载 AkironZsh
+source ~/.config/akzsh/init.zsh
 ```
 
-| 参数                | 默认值                                | 说明                                         |
-| ------------------- | ------------------------------------- | -------------------------------------------- |
-| `EXC_FOLDERS`       | `{.bzr,CVS,.git,.hg,.svn,.idea,.tox}` | 设置 grep 命令要忽略的目录                   |
-| `ZSH_CACHE_DIR`     | `$HOME/.cache/akiron-zsh`                   | 设置 zsh 缓存目录                            |
-| `CASE_SENSITIVE`    | `false`                               | 设置 Tab 补全时大小写是否敏感                |
+| 参数                      | 默认值                                | 说明                                         |
+| ------------------------- | ------------------------------------- | -------------------------------------------- |
+| `EXC_FOLDERS`             | `{.bzr,CVS,.git,.hg,.svn,.idea,.tox}` | 设置 grep 命令要忽略的目录                   |
+| `ZSH_CACHE_DIR`           | `$HOME/.cache/akzsh`                  | 设置 zsh 缓存目录                            |
+| `CASE_SENSITIVE`          | `false`                               | 设置 Tab 补全时大小写是否敏感                |
 | `AKIRON_ZSH_IN_LASTDIR`   | `false`                               | 是否在启动时自动进入上次退出时的目录         |
 | `AKIRON_ZSH_HISTORY_SHOW` | `true`                                | 是否绑定 `Ctrl + R` 快捷键展示搜索历史命令   |
 | `AKIRON_ZSH_PROMPT_STYLE` | `compact`                             | 设置提示符风格，可选 `compact` 或 `segments` |

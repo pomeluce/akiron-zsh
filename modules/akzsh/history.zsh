@@ -1,5 +1,5 @@
 ## History wrapper
-function _akiron_zsh_history {
+function _akzsh_history {
   local clear list
   zparseopts -E c=clear l=list
 
@@ -19,15 +19,15 @@ function _akiron_zsh_history {
 
 # Timestamp format
 case ${HIST_STAMPS-} in
-  "mm/dd/yyyy") alias history='_akiron_zsh_history -f' ;;
-  "dd.mm.yyyy") alias history='_akiron_zsh_history -E' ;;
-  "yyyy-mm-dd") alias history='_akiron_zsh_history -i' ;;
-  "") alias history='_akiron_zsh_history' ;;
-  *) alias history="_akiron_zsh_history -t '$HIST_STAMPS'" ;;
+  "mm/dd/yyyy") alias history='_akzsh_history -f' ;;
+  "dd.mm.yyyy") alias history='_akzsh_history -E' ;;
+  "yyyy-mm-dd") alias history='_akzsh_history -i' ;;
+  "") alias history='_akzsh_history' ;;
+  *) alias history="_akzsh_history -t '$HIST_STAMPS'" ;;
 esac
 
 ## History file configuration
-HISTFILE="$AKIRON_ZSH_CACHE/akiron-zsh-history"
+HISTFILE="$AKIRON_ZSH_CACHE/akzsh-history"
 HISTSIZE=50000
 SAVEHIST=10000
 

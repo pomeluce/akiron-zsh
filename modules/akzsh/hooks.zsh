@@ -26,7 +26,7 @@ fi
 SHORT_HOST="${HOST/.*/}"
 
 # ctrl + r 展开 history 列表, 并查找
-_akiron_zsh_history_show() {
+_akzsh_history_show() {
   function fzf_history_list (){
     if [ $#LBUFFER -gt 0 ]; then
       BUFFER=$(history -n | awk '!seen [$0]++' | fzf --query $LBUFFER)
@@ -41,7 +41,7 @@ _akiron_zsh_history_show() {
 }
 
 # 进入终端时, 自动 cd 到上次的目录
-_akiron_zsh_in_lastdir() {
+_akzsh_in_lastdir() {
   chpwd_hook() { echo $PWD > $AKIRON_ZSH_CACHE/currentdir }
   add-zsh-hook -Uz chpwd chpwd_hook
   currentdir=$(cat $AKIRON_ZSH_CACHE/currentdir 2>/dev/null || echo "")

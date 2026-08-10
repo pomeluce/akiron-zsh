@@ -1,10 +1,10 @@
 export AKIRON_ZSH_HOME=$(cd $(dirname $0);pwd)
-export AKIRON_ZSH_CACHE=$HOME/.cache/akiron-zsh
+export AKIRON_ZSH_CACHE=${ZSH_CACHE_DIR:-$HOME/.cache/akzsh}
 ZIM_CONFIG_FILE=$AKIRON_ZSH_HOME/zimrc
 ZIM_HOME=$HOME/.cache/zim
 
 if [[ ! -d ${AKIRON_ZSH_CACHE} ]]; then
-  mkdir $AKIRON_ZSH_CACHE
+  mkdir -p $AKIRON_ZSH_CACHE
 fi
 
 # Download zimfw plugin manager if missing.
@@ -23,5 +23,5 @@ if [[ -f ${ZIM_HOME}/init.zsh ]]; then
 fi
 
 # hooks start
-[[ $AKIRON_ZSH_HISTORY_SHOW == false ]] || _akiron_zsh_history_show
-[[ $AKIRON_ZSH_IN_LASTDIR == false ]] || _akiron_zsh_in_lastdir
+[[ $AKIRON_ZSH_HISTORY_SHOW == false ]] || _akzsh_history_show
+[[ $AKIRON_ZSH_IN_LASTDIR == false ]] || _akzsh_in_lastdir
