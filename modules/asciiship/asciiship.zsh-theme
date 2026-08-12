@@ -91,7 +91,9 @@ _prompt_asciiship_user_host_segment() {
   if (( EUID == 0 )); then
     print -n "%B%{$azim_red%}%n%{$azim_reset_color%}%b in "
   elif [[ -n ${SSH_TTY} ]]; then
-    print -n "%{$azim_limegreen%}%n%{$azim_reset_color%} at %{$azim_limegreen%}%m%{$azim_reset_color%} in "
+    local username=${USER}
+    local -u initial=${username:0:1}
+    print -n "%{$azim_limegreen%}${initial}${username:1}%{$azim_reset_color%} at %{$azim_limegreen%}%m%{$azim_reset_color%} in "
   fi
 }
 
@@ -99,7 +101,9 @@ _prompt_asciiship_segments_user_host_segment() {
   if (( EUID == 0 )); then
     print -n "%{$azim_red%}%{$azim_bg_red%}%{$azim_dark%}%B %n %b%{$azim_reset_bg%}%{$azim_reset_color%}%{$azim_red%}%{$azim_reset_color%} "
   elif [[ -n ${SSH_TTY} ]]; then
-    print -n "%{$azim_turquoise%}%{$azim_bg_turquoise%}%{$azim_dark%} %n %{$azim_reset_bg%}%{$azim_reset_color%}%{$azim_turquoise%}%{$azim_reset_color%} "
+    local username=${USER}
+    local -u initial=${username:0:1}
+    print -n "%{$azim_turquoise%}%{$azim_bg_turquoise%}%{$azim_dark%} ${initial}${username:1} %{$azim_reset_bg%}%{$azim_reset_color%}%{$azim_turquoise%}%{$azim_reset_color%} "
   fi
 }
 
