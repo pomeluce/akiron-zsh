@@ -65,7 +65,8 @@ if (( ${+functions[git-info]} )); then
   zstyle ':zim:git-info' verbose yes
   zstyle ':zim:git-info:branch' format '%b'
   zstyle ':zim:git-info:commit' format "HEAD %{$azim_limegreen%}(%c)%{$azim_reset_color%}"
-  zstyle ':zim:git-info:action' format "(%{$azim_magenta%}%a%{$azim_reset_color%})"
+  zstyle ':zim:git-info:action' format "(%{$azim_magenta%}%s%{$azim_reset_color%})"
+  zstyle ':zim:git-info:unmerged' format " %{$azim_red%}conflict%{$azim_reset_color%}"
   zstyle ':zim:git-info:stashed' format " %{$azim_limegreen%}%{$azim_reset_color%}"
   zstyle ':zim:git-info:unindexed' format " %{$azim_orange%}!%{$azim_reset_color%}"
   zstyle ':zim:git-info:untracked' format " %{$azim_red%}?%{$azim_reset_color%}"
@@ -75,12 +76,12 @@ if (( ${+functions[git-info]} )); then
   case ${AKIRON_ZSH_PROMPT_STYLE:-compact} in
     segments)
       zstyle ':zim:git-info:keys' format \
-        'status' '%S%I%u%i%A%B' \
+        'status' '%U%S%I%u%i%A%B' \
         'prompt' "%{$azim_turquoise%} %b%{$azim_reset_color%}%s\${git_info[status]:+\"\${git_info[status]}\"}"
       ;;
     *)
       zstyle ':zim:git-info:keys' format \
-        'status' '%S%I%u%i%A%B' \
+        'status' '%U%S%I%u%i%A%B' \
         'prompt' "on %{$azim_turquoise%} %b%{$azim_reset_color%}%s\${git_info[status]:+\"\${git_info[status]}\"}"
       ;;
   esac

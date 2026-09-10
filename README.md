@@ -281,6 +281,26 @@ user at host in  /etc/nixos on  main ↑ via myenv 
 
 通过 `AKIRON_ZSH_PROMPT_STYLE` 环境变量或 Nix 选项 `promptStyle` 切换。
 
+两种风格使用相同的 Git 状态提示：紫色的 `(merge)`、`(rebase)` 等操作标记表示操作仍在进行；红色的 `conflict` 冲突标记表示存在未解决的冲突，适用于合并、变基、cherry-pick 等场景。
+
+以默认紧凑风格为例：
+
+```text
+# 合并中，存在未解决的冲突
+ ~/project on  main(merge) conflict
+
+
+# 所有冲突已解决并执行 git add，等待完成合并提交
+ ~/project on  main(merge) ↑
+
+
+# 合并提交完成，工作区干净且没有其他 Git 状态
+ ~/project on  main
+
+```
+
+`↑` 表示已暂存的修改，`!` 表示未暂存的修改，`?` 表示未跟踪的文件。冲突文件由 `conflict` 单独表示；若其他文件还有修改或未被跟踪，相应标记会同时显示。
+
 ## Git 快捷命令
 
 所有命令统一采用 `g` + 类别首字母的命名约定。简单命令为别名，带参数拼接的为函数。
