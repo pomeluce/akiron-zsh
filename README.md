@@ -497,8 +497,10 @@ user at host in  /etc/nixos on  main ↑ via myenv 
 
 | 命令                     | 说明                                    |
 | ------------------------ | --------------------------------------- |
-| `nxgc [older_than]`      | Nix 系统垃圾回收，默认清理 7 天前的数据 |
-| `nxgc --all` / `nxgc -a` | 清理所有 Nix 历史并执行完整垃圾回收     |
+| `nxgc [older_than]`      | 清理当前用户默认 profile 和 NixOS 系统 profile 的旧版本，默认保留 7 天，支持 `14d` |
+| `nxgc --all` / `nxgc -a` | 清理上述 profile 的所有非当前版本并回收未引用对象 |
+
+`nxgc` 在删除指定 profile 的历史后执行一次 `nix-store --gc`，回收 store 中未被任何 GC root 引用的对象。
 
 ### Home Manager 集成
 
@@ -507,8 +509,10 @@ user at host in  /etc/nixos on  main ↑ via myenv 
 | `hm`                     | `home-manager` 快捷别名                                     |
 | `hmswitch`               | `home-manager switch --flake .#$(hostname -s)` 应用用户配置 |
 | `hmhistory`              | 查看 home-manager profile 历史                              |
-| `hmgc [older_than]`      | 清理 home-manager 旧版本，默认保留 7 天                     |
-| `hmgc --all` / `hmgc -a` | 清理所有 home-manager 历史并执行垃圾回收                    |
+| `hmgc [older_than]`      | 清理 home-manager 旧版本，默认保留 7 天，支持 `"-14 days"` 或 `14d` |
+| `hmgc --all` / `hmgc -a` | 清理所有非当前 home-manager 版本并回收未引用对象 |
+
+`hmgc` 默认执行 `home-manager expire-generations "-7 days"`，再执行 `nix-store --gc`；`--all` 使用 `expire-generations now`，仍保留当前 generation。Home Manager 自行确定 profile 路径。
 
 ## 其他常用别名
 

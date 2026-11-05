@@ -25,25 +25,18 @@ alias nxbuild='nix build'
 
 # ── nxgc: Nix garbage collection ────────────────────────────────────────────
 function nxgc() {
-  function _nxgc_all() {
-    if command -v nixos-rebuild >/dev/null 2>&1; then
-      sudo nix profile wipe-history --profile /nix/var/nix/profiles/system 2>/dev/null
-      sudo nix-collect-garbage -d
-    fi
-    nix-collect-garbage -d
-  }
-
   local older_than=${1:-7d}
+  local -a history_args=()
 
-  if [[ "$1" == "--all" || "$1" == "-a" ]]; then
-    _nxgc_all
-  else
-    if command -v nixos-rebuild >/dev/null 2>&1; then
-      sudo nix profile wipe-history --older-than "$older_than" --profile /nix/var/nix/profiles/system 2>/dev/null
-      sudo nix-collect-garbage -d --delete-older-than "$older_than"
-    fi
-    nix-collect-garbage -d --delete-older-than "$older_than"
+  if [[ "$older_than" != "--all" && "$older_than" != "-a" ]]; then
+    history_args=(--older-than "$older_than")
   fi
+
+  if command -v nixos-rebuild >/dev/null 2>&1; then
+    sudo nix profile wipe-history "${history_args[@]}" --profile /nix/var/nix/profiles/system || return
+  fi
+  nix profile wipe-history "${history_args[@]}" || return
+  nix-store --gc
 }
 
 # ── nxrun: nix run (with smart package resolution) ──────────────────────────
@@ -257,20 +250,15 @@ if command -v home-manager >/dev/null 2>&1; then
   fi
 
   function hmgc() {
-    local hm_profile="$HOME/.local/state/nix/profiles/home-manager"
+    local older_than=${1:--7 days}
 
-    if [[ ! -e "$hm_profile" ]]; then
-      echo "Error: home-manager profile not found at $hm_profile"
-      return 1
+    if [[ "$older_than" == "--all" || "$older_than" == "-a" ]]; then
+      older_than=now
+    elif [[ "$older_than" == <->d ]]; then
+      older_than="-${older_than%d} days"
     fi
 
-    if [[ "$1" == "--all" || "$1" == "-a" ]]; then
-      nix profile wipe-history --profile "$hm_profile"
-      nix-collect-garbage -d
-    else
-      local older_than=${1:-7d}
-      nix profile wipe-history --older-than "$older_than" --profile "$hm_profile"
-      nix-collect-garbage -d --delete-older-than "$older_than"
-    fi
+    home-manager expire-generations "$older_than" || return
+    nix-store --gc
   }
 fi
